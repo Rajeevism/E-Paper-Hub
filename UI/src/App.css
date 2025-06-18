@@ -1,0 +1,32 @@
+/* src/App.css */
+
+/* 
+  This sets up the main layout. 
+  It tells the App to arrange its children (NavBar, main-content) vertically.
+*/
+.App {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    /* Make sure the app takes at least the full screen height */
+    text-align: center;
+    /* This helps with default centering */
+}
+
+/* 
+    This ensures the main content area is flexible and can grow to fill
+    the available space below the NavBar.
+  */
+.main-content {
+    flex: 1;
+    /* Allows this element to grow and take up remaining space */
+    padding: 20px;
+    /* Add some spacing around your page content */
+}
+
+/* A reset to remove default browser margins */
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+        "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+        sans-serif; }

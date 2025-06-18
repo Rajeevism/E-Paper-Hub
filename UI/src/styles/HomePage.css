@@ -1,0 +1,59 @@
+.book-section {
+    width: 100%;
+    max-width: 1200px;
+    margin: 40px auto;
+    /* Adds space between sections */
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.book-section h3 {
+    font-size: 1.8rem;
+    text-align: left;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.book-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    /* Space between the book cards */
+    justify-content: flex-start;
+    /* Aligns cards to the start. Use 'center' if you prefer. */
+}
+
+/* Styles for your hero section (you can adjust as needed) */
+.hero {
+    margin: 30px 0;
+}
+
+.hero h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.buy-btn,
+.sell-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.buy-btn {
+    background-color: #007bff;
+    color: white;
+}
+
+.sell-btn {
+    background-color: #28a745;
+    color: white; }

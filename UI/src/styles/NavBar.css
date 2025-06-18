@@ -1,0 +1,89 @@
+/* src/styles/NavBar.css */
+
+/* Main navbar container */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    /* Pushes logo and links to opposite ends */
+    align-items: center;
+    /* Vertically aligns items in the middle */
+    padding: 10px 40px;
+    /* Top/bottom padding, Left/right padding */
+    height: 60px;
+    /* Gives the navbar a fixed height */
+    background-color: #ffffff;
+    border-bottom: 1px solid #e7e7e7;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Logo container */
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+/* THIS IS THE KEY FIX: Control the logo's size */
+.app-logo {
+    height: 75px;
+    width: 75px;
+    border-radius: 20px;
+    }
+
+/* Menu for the navigation links */
+.nav-menu {
+    display: flex;
+    gap: 30px;
+    /* Adds space between the links */
+}
+
+.nav-link {
+    color: #333;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 5px 0;
+    position: relative;
+    transition: color 0.2s;
+}
+
+.nav-link:hover {
+    color: #007bff;
+}
+
+/* Optional: Underline effect on hover */
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #007bff;
+    transition: width 0.3s ease-in-out;
+}
+
+.nav-link:hover::after {
+    width: 100%; 
+}
+
+.nav-user-email {
+    font-weight: 500;
+    color: #555;
+}
+
+.nav-link-button {
+    background: none;
+    border: none;
+    color: #333;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 5px 0;
+    font-family: inherit;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s;
+}
+
+.nav-link-button:hover {
+    color: #d9534f; }
