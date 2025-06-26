@@ -1,10 +1,14 @@
+// UI/src/components/AuthModal.jsx
+
 import React, { useState, useEffect } from "react";
 import "../styles/AuthModal.css";
+import axios from "axios";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 
 import { auth } from "../firebase";
 import {
+  signInWithCustomToken,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   GoogleAuthProvider,
@@ -14,7 +18,9 @@ import {
 } from "firebase/auth";
 
 const AuthModal = ({ isOpen, onClose }) => {
-  const [view, setView] = useState("login"); // 'login', 'signup', or 'forgotPassword'
+  const [view, setView] = useState("login");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [otp, setOtp] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -27,12 +33,54 @@ const AuthModal = ({ isOpen, onClose }) => {
       setEmail("");
       setPassword("");
       setConfirmPassword("");
+      setPhoneNumber("");
+      setOtp("");
       setError("");
       setSuccessMessage("");
     }
   }, [isOpen]);
 
   if (!isOpen) return null;
+
+  const handleSendOtp = async (event) => {
+    event.preventDefault();
+    setError("");
+    setSuccessMessage("");
+    if (!phoneNumber.startsWith("+")) {
+      setError("Please include the country code (e.g., +91).");
+      return;
+    }
+    try {
+      await axios.post("http://localhost:4000/send-otp", { phoneNumber });
+      setSuccessMessage("OTP sent to your WhatsApp!");
+      setView("phoneLogin_step2");
+    } catch (err) {
+      setError("Failed to send OTP. Please try again.");
+    }
+  };
+
+  const handleVerifyOtp = async (event) => {
+    event.preventDefault();
+    setError("");
+    if (otp.length !== 6) {
+      setError("Please enter a valid 6-digit OTP.");
+      return;
+    }
+    try {
+      const response = await axios.post("http://localhost:4000/verify-otp", {
+        phoneNumber,
+        otp,
+      });
+      const { token } = response.data;
+      await signInWithCustomToken(auth, token);
+      setSuccessMessage("Logged in Successfully!");
+      setTimeout(() => {
+        onClose();
+      }, 2000);
+    } catch (err) {
+      setError(err.response?.data?.message || "Verification failed.");
+    }
+  };
 
   const handleSocialLogin = async (provider) => {
     setError("");
@@ -44,13 +92,10 @@ const AuthModal = ({ isOpen, onClose }) => {
         onClose();
       }, 2000);
     } catch (err) {
-      console.error("Social Login Error:", err.code);
       if (err.code === "auth/account-exists-with-different-credential") {
-        setError(
-          "An account already exists with this email. Please log in with the original method."
-        );
+        setError("Account exists with a different login method.");
       } else {
-        setError("Could not complete social login. Please try again.");
+        setError("Could not complete social login.");
       }
     }
   };
@@ -59,47 +104,30 @@ const AuthModal = ({ isOpen, onClose }) => {
     event.preventDefault();
     setError("");
     setSuccessMessage("");
-
     if (view === "signup" && password !== confirmPassword) {
       setError("Passwords do not match!");
       return;
     }
-
     try {
       if (view === "login") {
         await signInWithEmailAndPassword(auth, email, password);
-        setSuccessMessage("Logged in Successfully!");
       } else {
-        // 'signup'
         await createUserWithEmailAndPassword(auth, email, password);
-        setSuccessMessage("Account created successfully!");
       }
+      setSuccessMessage(
+        view === "login"
+          ? "Logged in Successfully!"
+          : "Account created successfully!"
+      );
       setTimeout(() => {
         onClose();
       }, 2000);
     } catch (err) {
-      // --- THIS IS THE CORRECT, FULL ERROR HANDLING BLOCK ---
-      console.error("Firebase Auth Error:", err.code);
-      switch (err.code) {
-        case "auth/user-not-found":
-        case "auth/invalid-email":
-          setError("No account found with this email.");
-          break;
-        case "auth/wrong-password":
-          setError("Incorrect password. Please try again.");
-          break;
-        case "auth/email-already-in-use":
-          setError("This email is already registered. Please login.");
-          break;
-        default:
-          setError("An error occurred. Please try again.");
-          break;
-      }
+      setError(err.message);
     }
   };
 
   const handlePasswordReset = async (event) => {
-    // This function is correct and remains unchanged
     event.preventDefault();
     setError("");
     setSuccessMessage("");
@@ -111,8 +139,7 @@ const AuthModal = ({ isOpen, onClose }) => {
       await sendPasswordResetEmail(auth, email);
       setSuccessMessage("Password reset email sent! Please check your inbox.");
     } catch (err) {
-      console.error("Password Reset Error:", err.code);
-      setError("Failed to send reset email. Please check the address.");
+      setError("Failed to send reset email.");
     }
   };
 
@@ -123,8 +150,56 @@ const AuthModal = ({ isOpen, onClose }) => {
           ×
         </button>
 
+        {view === "phoneLogin_step1" && (
+          <>
+            <h2>Login with Phone</h2>
+            <form className="auth-form" onSubmit={handleSendOtp}>
+              <p style={{ textAlign: "center", color: "#666", marginTop: 0 }}>
+                Enter your phone number to receive an OTP on WhatsApp.
+              </p>
+              <input
+                type="tel"
+                placeholder="+91 98765 43210"
+                required
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+              />
+              {error && <p className="error-message">{error}</p>}
+              <button type="submit">Send OTP</button>
+              <p className="switch-msg">
+                <a href="#" onClick={() => setView("login")}>
+                  Back to Login
+                </a>
+              </p>
+            </form>
+          </>
+        )}
+
+        {view === "phoneLogin_step2" && (
+          <>
+            <h2>Verify OTP</h2>
+            <form className="auth-form" onSubmit={handleVerifyOtp}>
+              <p style={{ textAlign: "center", color: "#666", marginTop: 0 }}>
+                Enter the 6-digit OTP sent to {phoneNumber}.
+              </p>
+              <input
+                type="text"
+                placeholder="123456"
+                required
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                maxLength="6"
+              />
+              {error && <p className="error-message">{error}</p>}
+              {successMessage && (
+                <p className="success-message">{successMessage}</p>
+              )}
+              <button type="submit">Verify & Login</button>
+            </form>
+          </>
+        )}
+
         {view === "forgotPassword" && (
-          // ... The Forgot Password view is unchanged ...
           <>
             <h2>Reset Password</h2>
             <form className="auth-form" onSubmit={handlePasswordReset}>
@@ -155,8 +230,6 @@ const AuthModal = ({ isOpen, onClose }) => {
         {(view === "login" || view === "signup") && (
           <>
             <h2>{view === "login" ? "Login" : "Sign Up"}</h2>
-
-            {/* --- THIS SECTION IS RESTORED --- */}
             {view === "login" && (
               <>
                 <div className="auth-options">
@@ -176,10 +249,7 @@ const AuthModal = ({ isOpen, onClose }) => {
                 <div className="divider">or</div>
               </>
             )}
-            {/* --- END OF RESTORED SECTION --- */}
-
             <form className="auth-form" onSubmit={handleEmailSubmit}>
-              {/* ... The rest of the form is unchanged ... */}
               <input
                 type="email"
                 placeholder="Email"
@@ -219,7 +289,11 @@ const AuthModal = ({ isOpen, onClose }) => {
                   >
                     Forgot Password?
                   </a>
-                  <button type="button" className="phone-login-btn">
+                  <button
+                    type="button"
+                    className="phone-login-btn"
+                    onClick={() => setView("phoneLogin_step1")}
+                  >
                     Login via Phone
                   </button>
                 </div>
