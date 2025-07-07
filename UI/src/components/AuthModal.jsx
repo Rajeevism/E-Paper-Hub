@@ -1,6 +1,8 @@
 // UI/src/components/AuthModal.jsx
 
 import React, { useState, useEffect } from "react";
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
 import "../styles/AuthModal.css";
 import axios from "axios";
 import { FcGoogle } from "react-icons/fc";
@@ -26,6 +28,7 @@ const AuthModal = ({ isOpen, onClose }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -37,6 +40,7 @@ const AuthModal = ({ isOpen, onClose }) => {
       setOtp("");
       setError("");
       setSuccessMessage("");
+      setIsLoading(false);
     }
   }, [isOpen]);
 
@@ -46,26 +50,32 @@ const AuthModal = ({ isOpen, onClose }) => {
     event.preventDefault();
     setError("");
     setSuccessMessage("");
-    if (!phoneNumber.startsWith("+")) {
-      setError("Please include the country code (e.g., +91).");
+    if (!phoneNumber) {
+      setError("Please enter a valid phone number.");
       return;
     }
+    setIsLoading(true);
     try {
       await axios.post("http://localhost:4000/send-otp", { phoneNumber });
       setSuccessMessage("OTP sent to your WhatsApp!");
       setView("phoneLogin_step2");
     } catch (err) {
+      console.error("OTP Send Error:", err);
       setError("Failed to send OTP. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleVerifyOtp = async (event) => {
     event.preventDefault();
     setError("");
+    setSuccessMessage("");
     if (otp.length !== 6) {
       setError("Please enter a valid 6-digit OTP.");
       return;
     }
+    setIsLoading(true);
     try {
       const response = await axios.post("http://localhost:4000/verify-otp", {
         phoneNumber,
@@ -73,11 +83,13 @@ const AuthModal = ({ isOpen, onClose }) => {
       });
       const { token } = response.data;
       await signInWithCustomToken(auth, token);
+      setIsLoading(false);
       setSuccessMessage("Logged in Successfully!");
       setTimeout(() => {
         onClose();
-      }, 2000);
+      }, 1500);
     } catch (err) {
+      setIsLoading(false);
       setError(err.response?.data?.message || "Verification failed.");
     }
   };
@@ -85,18 +97,23 @@ const AuthModal = ({ isOpen, onClose }) => {
   const handleSocialLogin = async (provider) => {
     setError("");
     setSuccessMessage("");
+    setIsLoading(true);
     try {
       await signInWithPopup(auth, provider);
       setSuccessMessage("Logged in Successfully!");
       setTimeout(() => {
         onClose();
-      }, 2000);
+      }, 1500);
     } catch (err) {
       if (err.code === "auth/account-exists-with-different-credential") {
-        setError("Account exists with a different login method.");
+        setError(
+          "An account with this email already exists. Please login using the original method."
+        );
       } else {
-        setError("Could not complete social login.");
+        setError("Could not complete social login. Please try again.");
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -108,12 +125,14 @@ const AuthModal = ({ isOpen, onClose }) => {
       setError("Passwords do not match!");
       return;
     }
+    setIsLoading(true);
     try {
       if (view === "login") {
         await signInWithEmailAndPassword(auth, email, password);
       } else {
         await createUserWithEmailAndPassword(auth, email, password);
       }
+      setIsLoading(false);
       setSuccessMessage(
         view === "login"
           ? "Logged in Successfully!"
@@ -121,8 +140,11 @@ const AuthModal = ({ isOpen, onClose }) => {
       );
       setTimeout(() => {
         onClose();
-      }, 2000);
+      }, 1500);
     } catch (err) {
+      setIsLoading(false);
+      // --- THIS IS THE CORRECTED LINE ---
+      console.error("Email/Password Auth Error:", err);
       setError(err.message);
     }
   };
@@ -135,11 +157,15 @@ const AuthModal = ({ isOpen, onClose }) => {
       setError("Please enter your email address.");
       return;
     }
+    setIsLoading(true);
     try {
       await sendPasswordResetEmail(auth, email);
       setSuccessMessage("Password reset email sent! Please check your inbox.");
     } catch (err) {
+      console.error("Password Reset Error:", err);
       setError("Failed to send reset email.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -157,15 +183,24 @@ const AuthModal = ({ isOpen, onClose }) => {
               <p style={{ textAlign: "center", color: "#666", marginTop: 0 }}>
                 Enter your phone number to receive an OTP on WhatsApp.
               </p>
-              <input
-                type="tel"
-                placeholder="+91 98765 43210"
-                required
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-              />
+              <div className="phone-input-container">
+                <PhoneInput
+                  placeholder="Enter phone number"
+                  value={phoneNumber}
+                  onChange={setPhoneNumber}
+                  international
+                  defaultCountry="IN"
+                  countryCallingCodeEditable={false}
+                />
+              </div>
               {error && <p className="error-message">{error}</p>}
-              <button type="submit">Send OTP</button>
+              <button type="submit" disabled={isLoading}>
+                {isLoading ? (
+                  <div className="loading-spinner"></div>
+                ) : (
+                  "Send OTP"
+                )}
+              </button>
               <p className="switch-msg">
                 <a href="#" onClick={() => setView("login")}>
                   Back to Login
@@ -190,11 +225,18 @@ const AuthModal = ({ isOpen, onClose }) => {
                 onChange={(e) => setOtp(e.target.value)}
                 maxLength="6"
               />
-              {error && <p className="error-message">{error}</p>}
-              {successMessage && (
+              {!isLoading && error && <p className="error-message">{error}</p>}
+              {!isLoading && successMessage && (
                 <p className="success-message">{successMessage}</p>
               )}
-              <button type="submit">Verify & Login</button>
+              {isLoading && (
+                <div className="spinner-container">
+                  <div className="loading-spinner"></div>
+                </div>
+              )}
+              {!isLoading && !successMessage && (
+                <button type="submit">Verify & Login</button>
+              )}
             </form>
           </>
         )}
@@ -217,7 +259,13 @@ const AuthModal = ({ isOpen, onClose }) => {
               {successMessage && (
                 <p className="success-message">{successMessage}</p>
               )}
-              <button type="submit">Send Reset Link</button>
+              <button type="submit" disabled={isLoading}>
+                {isLoading ? (
+                  <div className="loading-spinner"></div>
+                ) : (
+                  "Send Reset Link"
+                )}
+              </button>
               <p className="switch-msg">
                 <a href="#" onClick={() => setView("login")}>
                   Back to Login
@@ -236,12 +284,14 @@ const AuthModal = ({ isOpen, onClose }) => {
                   <button
                     className="social-btn google"
                     onClick={() => handleSocialLogin(new GoogleAuthProvider())}
+                    disabled={isLoading}
                   >
                     <FcGoogle className="social-icon" /> Continue with Google
                   </button>
                   <button
                     className="social-btn github"
                     onClick={() => handleSocialLogin(new GithubAuthProvider())}
+                    disabled={isLoading}
                   >
                     <FaGithub className="social-icon" /> Continue with GitHub
                   </button>
@@ -277,8 +327,14 @@ const AuthModal = ({ isOpen, onClose }) => {
               {successMessage && (
                 <p className="success-message">{successMessage}</p>
               )}
-              <button type="submit" disabled={!!successMessage}>
-                {view === "login" ? "Login" : "Create Account"}
+              <button type="submit" disabled={isLoading || !!successMessage}>
+                {isLoading ? (
+                  <div className="loading-spinner"></div>
+                ) : view === "login" ? (
+                  "Login"
+                ) : (
+                  "Create Account"
+                )}
               </button>
               {view === "login" && (
                 <div className="extras">
