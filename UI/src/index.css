@@ -1,0 +1,50 @@
+:root {
+    /* Light Theme (Default) */
+    --bg-primary: #f0f2f5;
+    /* Light grey main background */
+    --bg-secondary: #ffffff;
+    /* White content cards */
+    --text-primary: #1c1e21;
+    /* Dark text */
+    --text-secondary: #65676b;
+    /* Grey text */
+    --border-color: #ddd;
+    /* Light border color */
+    --nav-bg: #232f3e;
+    /* Dark blue nav */
+    --nav-text: #ffffff;
+    /* White nav text */
+}
+
+html.dark {
+    /* Dark Theme */
+    --bg-primary: #1c1e21;
+    /* Dark grey main background */
+    --bg-secondary: #242526;
+    /* Slightly lighter card background */
+    --text-primary: #e4e6eb;
+    /* Light grey text */
+    --text-secondary: #b0b3b8;
+    /* Dimmer grey text */
+    --border-color: #393a3b;
+    /* Darker border color */
+    --nav-bg: #242526;
+    /* Match card background */
+    --nav-text: #e4e6eb;
+    /* Light grey nav text */
+}
+
+/* Apply the variables */
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    background-color: var(--bg-primary);
+    /* Use the variable */
+    color: var(--text-primary);
+    /* Use the variable */
+    transition: background-color 0.2s ease, color 0.2s ease; }

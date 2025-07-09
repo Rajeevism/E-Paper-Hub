@@ -1,0 +1,45 @@
+/* UI/src/styles/SearchBar.css */
+
+.search-bar-form {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+    /* Adjust as needed */
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    /* Rounded corners */
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.search-input {
+    flex-grow: 1;
+    /* Allows the input to take up available space */
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    outline: none;
+    /* Removes the blue outline on focus */
+    background-color: transparent;
+}
+
+.search-button {
+    background-color: #febd69;
+    /* Amazon-like orange/yellow */
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.search-button:hover {
+    background-color: #f3a847;
+}
+
+.search-button svg {
+    font-size: 1.2rem;
+    color: #111; }

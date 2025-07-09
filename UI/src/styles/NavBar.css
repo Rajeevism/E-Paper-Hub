@@ -1,89 +1,93 @@
-/* src/styles/NavBar.css */
-
-/* Main navbar container */
 .navbar {
     display: flex;
-    justify-content: space-between;
-    /* Pushes logo and links to opposite ends */
     align-items: center;
-    /* Vertically aligns items in the middle */
+    /* Vertically align all items */
     padding: 10px 40px;
-    /* Top/bottom padding, Left/right padding */
-    height: 60px;
-    /* Gives the navbar a fixed height */
-    background-color: #ffffff;
-    border-bottom: 1px solid #e7e7e7;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    height: 70px;
+    /* Slightly more height for a better feel */
+    background-color: #31527b;
+    /* Amazon-like dark blue */
+    border-bottom: 1px solid #131a22;
+    gap: 20px;
+    /* Adds some space between the main sections */
 }
 
-/* Logo container */
-.logo-container {
+/* --- Left Section (Logo) --- */
+.navbar-left {
+    flex-shrink: 0;
+    /* Prevents the logo from shrinking */
+}
+
+.app-logo {
+    height: 85px;
+    width: auto;
+}
+
+/* --- Center Section (Search Bar) --- */
+.navbar-center {
+    flex-grow: 1;
+    /* This is key: it takes up all available middle space */
+    display: flex;
+    justify-content: center;
+    /* Centers the search bar within this middle space */
+}
+
+/* --- Right Section (Links & User) --- */
+.navbar-right {
+    flex-shrink: 0;
+    /* Prevents this section from shrinking */
     display: flex;
     align-items: center;
-}
-
-/* THIS IS THE KEY FIX: Control the logo's size */
-.app-logo {
-    height: 75px;
-    width: 75px;
-    border-radius: 20px;
-    }
-
-/* Menu for the navigation links */
-.nav-menu {
-    display: flex;
     gap: 30px;
-    /* Adds space between the links */
+    /* Space between the links */
 }
 
-.nav-link {
-    color: #333;
+/* General styles for links in the right section */
+.nav-link,
+.nav-link-button,
+.nav-user-email {
+    color: #fff;
     text-decoration: none;
     font-size: 1rem;
     font-weight: 500;
-    padding: 5px 0;
-    position: relative;
-    transition: color 0.2s;
+    white-space: nowrap;
+    /* Prevents text like "My Cart" from wrapping */
+    padding: 5px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
 }
 
-.nav-link:hover {
-    color: #007bff;
+.nav-link:hover,
+.nav-link-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Optional: Underline effect on hover */
-.nav-link::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: 0;
-    left: 0;
-    background-color: #007bff;
-    transition: width 0.3s ease-in-out;
-}
-
-.nav-link:hover::after {
-    width: 100%; 
-}
-
-.nav-user-email {
-    font-weight: 500;
-    color: #555;
-}
-
+/* Specific button styles */
 .nav-link-button {
     background: none;
     border: none;
-    color: #333;
-    text-decoration: none;
-    font-size: 1rem;
-    font-weight: 500;
-    padding: 5px 0;
     font-family: inherit;
+    /* Use the same font as the rest of the page */
     cursor: pointer;
-    position: relative;
-    transition: color 0.2s;
 }
 
 .nav-link-button:hover {
-    color: #d9534f; }
+    color: #febd69;
+    /* Amazon-like gold for logout hover */
+}
+
+/* Ensure the user email is not a link */
+.nav-user-email {
+    cursor: default; }
+
+        /* Add this to NavBar.css */
+        .profile-avatar-container {
+            position: relative;
+        }
+    
+        .profile-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid #fff; }

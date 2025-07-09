@@ -1,36 +1,46 @@
+/* UI/src/styles/HomePage.css */
+
+/* This rule applies the card style to both the hero and book sections */
+.hero,
 .book-section {
-    width: 100%;
     max-width: 1200px;
-    margin: 40px auto;
-    /* Adds space between sections */
-    padding: 0 20px;
-    box-sizing: border-box;
+    margin: 25px auto;
+    padding: 25px;
+    background-color: var(--bg-secondary);
+    /* UPDATED */
+    border: 1px solid var(--border-color);
+    /* UPDATED */
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    /* Simplified shadow for both themes */
+    transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
+/* Styles for the "Old Books" and "New Books" headings */
 .book-section h3 {
     font-size: 1.8rem;
     text-align: left;
+    margin-top: 0;
     margin-bottom: 20px;
-    color: #333;
+    color: var(--text-primary);
+    /* UPDATED */
 }
 
+/* Grid layout for the books (no changes needed) */
 .book-grid {
     display: flex;
     flex-wrap: wrap;
     gap: 25px;
-    /* Space between the book cards */
     justify-content: flex-start;
-    /* Aligns cards to the start. Use 'center' if you prefer. */
 }
 
-/* Styles for your hero section (you can adjust as needed) */
-.hero {
-    margin: 30px 0;
-}
-
+/* Styles for your hero section content */
 .hero h2 {
     font-size: 1.5rem;
     margin-bottom: 20px;
+    text-align: center;
+    color: var(--text-primary);
+    /* UPDATED */
 }
 
 .hero-buttons {
@@ -39,6 +49,7 @@
     gap: 15px;
 }
 
+/* Your existing button styles (no changes needed) */
 .buy-btn,
 .sell-btn {
     padding: 12px 24px;
@@ -56,4 +67,14 @@
 
 .sell-btn {
     background-color: #28a745;
-    color: white; }
+    color: white;
+}
+
+/* A general error message style if you need it */
+.error-message {
+    color: #D8000C;
+    background-color: #FFD2D2;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+}

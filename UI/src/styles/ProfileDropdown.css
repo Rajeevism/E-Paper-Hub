@@ -1,0 +1,47 @@
+/* UI/src/styles/ProfileDropdown.css */
+.profile-dropdown {
+    position: absolute;
+    top: 75px;
+    /* Position below navbar */
+    right: 40px;
+    width: 250px;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 100;
+    padding: 10px;
+}
+
+.dropdown-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px;
+}
+
+.dropdown-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.dropdown-section {
+    padding: 10px 5px;
+}
+
+.logout-button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background-color: #d9534f;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 10px 0; }
