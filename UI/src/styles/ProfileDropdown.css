@@ -1,33 +1,51 @@
-/* UI/src/styles/ProfileDropdown.css */
 .profile-dropdown {
     position: absolute;
-    top: 75px;
+    top: 60px;
     /* Position below navbar */
-    right: 40px;
-    width: 250px;
+    right: 0;
+    width: 280px;
     background-color: var(--bg-secondary);
     border: 1px solid var(--border-color);
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     z-index: 100;
-    padding: 10px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .dropdown-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
     padding: 5px;
 }
 
-.dropdown-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+.dropdown-greeting {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.dropdown-email {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
 }
 
 .dropdown-section {
-    padding: 10px 5px;
+    padding: 5px;
+}
+
+.dropdown-item {
+    display: block;
+    padding: 10px;
+    color: var(--text-primary);
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+.dropdown-item:hover {
+    background-color: var(--bg-hover);
 }
 
 .logout-button {
@@ -38,10 +56,16 @@
     color: white;
     border-radius: 5px;
     cursor: pointer;
-    margin-top: 10px;
+    font-size: 1rem;
+    transition: background-color 0.2s;
+}
+
+.logout-button:hover {
+    background-color: #c9302c;
 }
 
 hr {
     border: none;
     border-top: 1px solid var(--border-color);
-    margin: 10px 0; }
+    margin: 5px 0;
+}

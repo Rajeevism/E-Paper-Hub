@@ -1,5 +1,3 @@
-// UI/src/components/AuthModal.jsx
-
 import React, { useState, useEffect } from "react";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
@@ -17,6 +15,8 @@ import {
   GithubAuthProvider,
   signInWithPopup,
   sendPasswordResetEmail,
+  updateProfile,
+  getAdditionalUserInfo,
 } from "firebase/auth";
 
 const AuthModal = ({ isOpen, onClose }) => {
@@ -26,6 +26,7 @@ const AuthModal = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [name, setName] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -38,6 +39,7 @@ const AuthModal = ({ isOpen, onClose }) => {
       setConfirmPassword("");
       setPhoneNumber("");
       setOtp("");
+      setName("");
       setError("");
       setSuccessMessage("");
       setIsLoading(false);
@@ -82,22 +84,59 @@ const AuthModal = ({ isOpen, onClose }) => {
         otp,
       });
       const { token } = response.data;
-      await signInWithCustomToken(auth, token);
+      const userCredential = await signInWithCustomToken(auth, token);
+      const additionalInfo = getAdditionalUserInfo(userCredential);
+
       setIsLoading(false);
-      setSuccessMessage("Logged in Successfully!");
-      setTimeout(() => {
-        onClose();
-      }, 1500);
+
+      if (additionalInfo.isNewUser) {
+        setView("completeProfile");
+      } else {
+        setSuccessMessage("Logged in Successfully!");
+        setTimeout(() => {
+          onClose();
+        }, 1500);
+      }
     } catch (err) {
       setIsLoading(false);
       setError(err.response?.data?.message || "Verification failed.");
     }
   };
 
-  const handleSocialLogin = async (provider) => {
+  const handleProfileUpdate = async (event) => {
+    event.preventDefault();
+    setError("");
+    if (!name.trim()) {
+      setError("Please enter your name.");
+      return;
+    }
+    setIsLoading(true);
+    try {
+      if (auth.currentUser) {
+        await updateProfile(auth.currentUser, { displayName: name });
+        setSuccessMessage("Welcome! Profile updated successfully.");
+        setIsLoading(false);
+        setTimeout(() => {
+          onClose();
+        }, 1500);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.error("Profile Update Error:", error);
+      setError("Failed to update profile. Please try again.");
+    }
+  };
+
+  const handleSocialLogin = async (providerType) => {
     setError("");
     setSuccessMessage("");
     setIsLoading(true);
+    const provider = new providerType();
+
+    if (providerType === GoogleAuthProvider) {
+      provider.setCustomParameters({ prompt: "select_account" });
+    }
+
     try {
       await signInWithPopup(auth, provider);
       setSuccessMessage("Logged in Successfully!");
@@ -105,13 +144,7 @@ const AuthModal = ({ isOpen, onClose }) => {
         onClose();
       }, 1500);
     } catch (err) {
-      if (err.code === "auth/account-exists-with-different-credential") {
-        setError(
-          "An account with this email already exists. Please login using the original method."
-        );
-      } else {
-        setError("Could not complete social login. Please try again.");
-      }
+      setError("Could not complete social login. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -130,7 +163,14 @@ const AuthModal = ({ isOpen, onClose }) => {
       if (view === "login") {
         await signInWithEmailAndPassword(auth, email, password);
       } else {
-        await createUserWithEmailAndPassword(auth, email, password);
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        if (userCredential.user) {
+          await updateProfile(userCredential.user, { displayName: name });
+        }
       }
       setIsLoading(false);
       setSuccessMessage(
@@ -143,9 +183,7 @@ const AuthModal = ({ isOpen, onClose }) => {
       }, 1500);
     } catch (err) {
       setIsLoading(false);
-      // --- THIS IS THE CORRECTED LINE ---
-      console.error("Email/Password Auth Error:", err);
-      setError(err.message);
+      setError(err.message.replace("Firebase: ", ""));
     }
   };
 
@@ -176,6 +214,35 @@ const AuthModal = ({ isOpen, onClose }) => {
           ×
         </button>
 
+        {view === "completeProfile" && (
+          <>
+            <h2>One Last Step!</h2>
+            <p style={{ textAlign: "center", color: "#666", marginTop: 0 }}>
+              Please enter your name to complete your profile.
+            </p>
+            <form className="auth-form" onSubmit={handleProfileUpdate}>
+              <input
+                type="text"
+                placeholder="Full Name"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              {error && <p className="error-message">{error}</p>}
+              {successMessage && (
+                <p className="success-message">{successMessage}</p>
+              )}
+              <button type="submit" disabled={isLoading || !!successMessage}>
+                {isLoading ? (
+                  <div className="loading-spinner"></div>
+                ) : (
+                  "Save & Continue"
+                )}
+              </button>
+            </form>
+          </>
+        )}
+
         {view === "phoneLogin_step1" && (
           <>
             <h2>Login with Phone</h2>
@@ -202,7 +269,13 @@ const AuthModal = ({ isOpen, onClose }) => {
                 )}
               </button>
               <p className="switch-msg">
-                <a href="#" onClick={() => setView("login")}>
+                <a
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setView("login");
+                  }}
+                >
                   Back to Login
                 </a>
               </p>
@@ -225,18 +298,17 @@ const AuthModal = ({ isOpen, onClose }) => {
                 onChange={(e) => setOtp(e.target.value)}
                 maxLength="6"
               />
-              {!isLoading && error && <p className="error-message">{error}</p>}
-              {!isLoading && successMessage && (
+              {error && <p className="error-message">{error}</p>}
+              {successMessage && (
                 <p className="success-message">{successMessage}</p>
               )}
-              {isLoading && (
-                <div className="spinner-container">
+              <button type="submit" disabled={isLoading || !!successMessage}>
+                {isLoading ? (
                   <div className="loading-spinner"></div>
-                </div>
-              )}
-              {!isLoading && !successMessage && (
-                <button type="submit">Verify & Login</button>
-              )}
+                ) : (
+                  "Verify & Login"
+                )}
+              </button>
             </form>
           </>
         )}
@@ -267,7 +339,13 @@ const AuthModal = ({ isOpen, onClose }) => {
                 )}
               </button>
               <p className="switch-msg">
-                <a href="#" onClick={() => setView("login")}>
+                <a
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setView("login");
+                  }}
+                >
                   Back to Login
                 </a>
               </p>
@@ -283,14 +361,14 @@ const AuthModal = ({ isOpen, onClose }) => {
                 <div className="auth-options">
                   <button
                     className="social-btn google"
-                    onClick={() => handleSocialLogin(new GoogleAuthProvider())}
+                    onClick={() => handleSocialLogin(GoogleAuthProvider)}
                     disabled={isLoading}
                   >
                     <FcGoogle className="social-icon" /> Continue with Google
                   </button>
                   <button
                     className="social-btn github"
-                    onClick={() => handleSocialLogin(new GithubAuthProvider())}
+                    onClick={() => handleSocialLogin(GithubAuthProvider)}
                     disabled={isLoading}
                   >
                     <FaGithub className="social-icon" /> Continue with GitHub
@@ -300,6 +378,15 @@ const AuthModal = ({ isOpen, onClose }) => {
               </>
             )}
             <form className="auth-form" onSubmit={handleEmailSubmit}>
+              {view === "signup" && (
+                <input
+                  type="text"
+                  placeholder="Full Name"
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              )}
               <input
                 type="email"
                 placeholder="Email"
@@ -341,7 +428,10 @@ const AuthModal = ({ isOpen, onClose }) => {
                   <a
                     href="#"
                     className="forgot-password-link"
-                    onClick={() => setView("forgotPassword")}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setView("forgotPassword");
+                    }}
                   >
                     Forgot Password?
                   </a>
@@ -360,7 +450,10 @@ const AuthModal = ({ isOpen, onClose }) => {
                   : "Already have an account?"}
                 <a
                   href="#"
-                  onClick={() => setView(view === "login" ? "signup" : "login")}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setView(view === "login" ? "signup" : "login");
+                  }}
                 >
                   {view === "login" ? " Sign Up" : " Login"}
                 </a>

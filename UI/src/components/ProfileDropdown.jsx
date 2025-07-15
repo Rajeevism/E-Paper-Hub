@@ -1,26 +1,45 @@
-// UI/src/components/ProfileDropdown.jsx
 import React from "react";
 import { useAuth } from "../context/AuthContext.jsx";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase.jsx";
 import ThemeSwitcher from "../components/ThemeSwitcher.jsx";
-import "../styles/ProfileDropdown.css"; // We'll create this CSS
+import "../styles/ProfileDropdown.css";
 
-const ProfileDropdown = () => {
+// --- FIX: Accept the onClose prop ---
+const ProfileDropdown = ({ onClose }) => {
   const { currentUser } = useAuth();
+
   const handleLogout = () => {
-    signOut(auth).catch((err) => console.error(err));
+    signOut(auth)
+      .then(() => {
+        onClose(); // --- FIX: Close the dropdown on successful logout
+      })
+      .catch((err) => console.error(err));
   };
+
+  // This check prevents errors if the component somehow renders without a user
+  if (!currentUser) {
+    return null;
+  }
 
   return (
     <div className="profile-dropdown">
       <div className="dropdown-header">
-        <img
-          src={currentUser.photoURL || "default-avatar.png"}
-          alt="Profile"
-          className="dropdown-avatar"
-        />
-        <p>Hello, {currentUser.displayName || "User"}</p>
+        {/* --- FIX: This is where we display the user's name --- */}
+        <p className="dropdown-greeting">
+          Hello, {currentUser.displayName || "User"}
+        </p>
+        <span className="dropdown-email">{currentUser.email}</span>
+      </div>
+      <hr />
+      <div className="dropdown-section">
+        {/* You can add more links here later */}
+        <a href="/profile" className="dropdown-item">
+          My Profile
+        </a>
+        <a href="/orders" className="dropdown-item">
+          My Orders
+        </a>
       </div>
       <hr />
       <div className="dropdown-section">
@@ -34,4 +53,5 @@ const ProfileDropdown = () => {
     </div>
   );
 };
+
 export default ProfileDropdown;

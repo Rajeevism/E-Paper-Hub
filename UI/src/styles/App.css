@@ -1,9 +1,4 @@
-/* src/App.css */
 
-/* 
-  This sets up the main layout. 
-  It tells the App to arrange its children (NavBar, main-content) vertically.
-*/
 .App {
     display: flex;
     flex-direction: column;
@@ -13,10 +8,6 @@
     /* This helps with default centering */
 }
 
-/* 
-    This ensures the main content area is flexible and can grow to fill
-    the available space below the NavBar.
-  */
 .main-content {
     flex: 1;
     /* Allows this element to grow and take up remaining space */

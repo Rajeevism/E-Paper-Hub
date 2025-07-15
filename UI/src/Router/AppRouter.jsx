@@ -1,19 +1,44 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import HomePage from "../pages/HomePage.jsx";
-import CartPage from "../pages/CartPage.jsx";
-import BuyPage from "../pages/BuyPage.jsx";
-import SellPage from "../pages/SellPage.jsx";
-
-const AppRouter = ({ openAuthModal }) => {
+import HomePage from "../pages/HomePage";
+import CartPage from "../pages/CartPage";
+import BuyPage from "../pages/BuyPage";
+import SellPage from "../pages/SellPage";
+import ProtectedRoute from "../components/ProtectedRoute";
+// --- Accept the onAuthRequired prop ---
+const AppRoutes = ({ onAuthRequired }) => {
   return (
     <Routes>
-      <Route path="/" element={<HomePage openAuthModal={openAuthModal} />} />
-      <Route path="/cart" element={<CartPage />} />
-      <Route path="/sell-new-and-old-books/papers" element={<SellPage />} />
-      <Route path="/buy-new-and-old-books/papers" element={<BuyPage />} />
+      {/* Public Route */}
+      <Route path="/" element={<HomePage />} />
+
+      {/* Protected Routes */}
+      <Route
+        path="/cart"
+        element={
+          <ProtectedRoute onAuthRequired={onAuthRequired}>
+            <CartPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/buy"
+        element={
+          <ProtectedRoute onAuthRequired={onAuthRequired}>
+            <BuyPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/sell"
+        element={
+          <ProtectedRoute onAuthRequired={onAuthRequired}>
+            <SellPage />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 };
 
-export default AppRouter;
+export default AppRoutes;

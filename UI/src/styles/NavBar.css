@@ -1,93 +1,87 @@
+.navbar-container {
+    position: relative;
+}
+
 .navbar {
     display: flex;
     align-items: center;
-    /* Vertically align all items */
     padding: 10px 40px;
     height: 70px;
-    /* Slightly more height for a better feel */
-    background-color: #31527b;
-    /* Amazon-like dark blue */
-    border-bottom: 1px solid #131a22;
+    background-color: var(--nav-bg, #232f3e);
+    border-bottom: 1px solid var(--border-color, #131a22);
     gap: 20px;
-    /* Adds some space between the main sections */
 }
 
-/* --- Left Section (Logo) --- */
 .navbar-left {
     flex-shrink: 0;
-    /* Prevents the logo from shrinking */
 }
 
 .app-logo {
-    height: 85px;
+    height: 50px;
     width: auto;
 }
 
-/* --- Center Section (Search Bar) --- */
 .navbar-center {
     flex-grow: 1;
-    /* This is key: it takes up all available middle space */
     display: flex;
     justify-content: center;
-    /* Centers the search bar within this middle space */
 }
 
-/* --- Right Section (Links & User) --- */
 .navbar-right {
     flex-shrink: 0;
-    /* Prevents this section from shrinking */
     display: flex;
     align-items: center;
     gap: 30px;
-    /* Space between the links */
 }
 
-/* General styles for links in the right section */
-.nav-link,
-.nav-link-button,
-.nav-user-email {
-    color: #fff;
+.nav-link {
+    color: var(--nav-text, #fff);
     text-decoration: none;
     font-size: 1rem;
     font-weight: 500;
     white-space: nowrap;
-    /* Prevents text like "My Cart" from wrapping */
     padding: 5px;
     border-radius: 4px;
     transition: background-color 0.2s;
 }
 
-.nav-link:hover,
-.nav-link-button:hover {
+.nav-link:hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Specific button styles */
-.nav-link-button {
+/* --- Container for the button and dropdown --- */
+.profile-container {
+    position: relative;
+}
+
+/* --- Wrapper for the avatar image/initials --- */
+.profile-btn {
     background: none;
     border: none;
-    font-family: inherit;
-    /* Use the same font as the rest of the page */
+    padding: 0;
     cursor: pointer;
+    border-radius: 50%;
 }
 
-.nav-link-button:hover {
-    color: #febd69;
-    /* Amazon-like gold for logout hover */
+.profile-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 2px solid var(--nav-text, #fff);
+    display: block;
 }
 
-/* Ensure the user email is not a link */
-.nav-user-email {
-    cursor: default; }
-
-        /* Add this to NavBar.css */
-        .profile-avatar-container {
-            position: relative;
-        }
-    
-        .profile-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid #fff; }
+/* --- Styles for the initials div --- */
+.profile-avatar-initial {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 2px solid var(--nav-text, #fff);
+    background-color: #007bff;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
