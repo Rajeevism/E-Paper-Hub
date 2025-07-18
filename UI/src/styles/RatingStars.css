@@ -1,0 +1,40 @@
+.rating-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stars {
+    display: inline-block;
+    font-size: 1rem;
+    position: relative;
+    color: #c7c7c7;
+}
+
+.star {
+    display: inline-block;
+}
+
+.full-star {
+    color: #FFA41C;
+}
+
+.half-star {
+    position: relative;
+    display: inline-block;
+}
+
+.half-star::before {
+    position: absolute;
+    content: '★';
+    left: 0;
+    top: 0;
+    width: 50%;
+    overflow: hidden;
+    color: #FFA41C;
+}
+
+.rating-count {
+    font-size: 0.9rem;
+    color: var(--text-color-secondary);
+}

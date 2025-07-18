@@ -1,45 +1,48 @@
-/* UI/src/styles/SearchBar.css */
+/* Create a new file: src/styles/SearchBar.css */
 
 .search-bar-form {
     display: flex;
     align-items: center;
     width: 100%;
     max-width: 500px;
-    /* Adjust as needed */
-    border: 1px solid #ccc;
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
     border-radius: 25px;
-    /* Rounded corners */
     overflow: hidden;
-    background-color: #fff;
+    transition: box-shadow 0.2s;
+}
+
+.search-bar-form:focus-within {
+    box-shadow: 0 0 0 2px var(--primary-color);
+    border-color: var(--primary-color);
 }
 
 .search-input {
     flex-grow: 1;
-    /* Allows the input to take up available space */
     border: none;
-    padding: 10px 20px;
+    background: none;
+    padding: 10px 15px;
     font-size: 1rem;
+    color: var(--text-color);
     outline: none;
-    /* Removes the blue outline on focus */
-    background-color: transparent;
+}
+
+.search-input::placeholder {
+    color: var(--text-color-secondary);
 }
 
 .search-button {
-    background-color: #febd69;
-    /* Amazon-like orange/yellow */
+    background-color: transparent;
     border: none;
-    padding: 10px 15px;
+    padding: 0 15px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.2s;
+    color: var(--text-color-secondary);
+    transition: color 0.2s;
 }
 
 .search-button:hover {
-    background-color: #f3a847;
+    color: var(--primary-color);
 }
-
-.search-button svg {
-    font-size: 1.2rem;
-    color: #111; }

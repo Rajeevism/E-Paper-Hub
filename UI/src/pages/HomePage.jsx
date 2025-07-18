@@ -1,4 +1,5 @@
-// UI/src/pages/HomePage.jsx
+// src/pages/HomePage.jsx
+// --- FULL UPDATED FILE ---
 
 import React, { useState, useEffect } from "react";
 import BookCard from "../components/BookCard.jsx";
@@ -6,7 +7,6 @@ import { useAuth } from "../context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 import "../styles/HomePage.css";
 
-// Import what we need from Firebase
 import { db } from "../firebase.jsx";
 import { collection, getDocs, query, where } from "firebase/firestore";
 
@@ -14,19 +14,15 @@ const HomePage = ({ openAuthModal }) => {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
 
-  // State to hold our books from the database
   const [usedBooks, setUsedBooks] = useState([]);
   const [newBooks, setNewBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // useEffect hook to fetch data when the component loads
   useEffect(() => {
     const fetchBooks = async () => {
       try {
         setLoading(true);
-
-        // Get 'Used' books
         const usedBooksQuery = query(
           collection(db, "books"),
           where("condition", "==", "Used")
@@ -38,7 +34,6 @@ const HomePage = ({ openAuthModal }) => {
         }));
         setUsedBooks(usedBooksList);
 
-        // Get 'New' books
         const newBooksQuery = query(
           collection(db, "books"),
           where("condition", "==", "New")
@@ -56,45 +51,18 @@ const HomePage = ({ openAuthModal }) => {
         setLoading(false);
       }
     };
-
     fetchBooks();
-  }, []); // The empty array means this runs only once
-
-  const handleProtectedAction = (actionType, bookId = null) => {
-    if (currentUser) {
-      switch (actionType) {
-        case "Buy Books":
-          navigate("/buy");
-          break;
-        case "Sell Books/Papers":
-          navigate("/sell");
-          break;
-        case "View Book":
-          navigate(`/book/${bookId}`);
-          break;
-        default:
-          break;
-      }
-    } else {
-      openAuthModal();
-    }
-  };
+  }, []);
 
   return (
     <>
       <section className="hero">
         <h2>What would you like to do?</h2>
         <div className="hero-buttons">
-          <button
-            className="buy-btn"
-            onClick={() => handleProtectedAction("Buy Books")}
-          >
+          <button className="buy-btn" onClick={() => navigate("/buy")}>
             📘 Buy Books
           </button>
-          <button
-            className="sell-btn"
-            onClick={() => handleProtectedAction("Sell Books/Papers")}
-          >
+          <button className="sell-btn" onClick={() => navigate("/sell")}>
             ♻️ Sell Books/Papers
           </button>
         </div>
@@ -105,14 +73,13 @@ const HomePage = ({ openAuthModal }) => {
 
       {!loading && !error && (
         <>
-          {/* --- NEW BOOKS SECTION IS NOW FIRST --- */}
           <section className="book-section">
             <h3>New Books</h3>
             <div className="book-grid">
               {newBooks.map((book) => (
                 <div
                   key={book.id}
-                  onClick={() => handleProtectedAction("View Book", book.id)}
+                  onClick={() => navigate(`/book/${book.id}`)}
                   style={{ cursor: "pointer" }}
                 >
                   <BookCard
@@ -122,20 +89,22 @@ const HomePage = ({ openAuthModal }) => {
                     discount={book.discount}
                     condition={book.condition}
                     imageUrl={book.imageUrl}
+                    // --- THIS IS THE FIX ---
+                    rating_avg={book.ratingAvg}
+                    rating_count={book.ratingCount}
                   />
                 </div>
               ))}
             </div>
           </section>
 
-          {/* --- OLD BOOKS SECTION IS NOW SECOND --- */}
           <section className="book-section">
             <h3>Old Books</h3>
             <div className="book-grid">
               {usedBooks.map((book) => (
                 <div
                   key={book.id}
-                  onClick={() => handleProtectedAction("View Book", book.id)}
+                  onClick={() => navigate(`/book/${book.id}`)}
                   style={{ cursor: "pointer" }}
                 >
                   <BookCard
@@ -145,6 +114,9 @@ const HomePage = ({ openAuthModal }) => {
                     discount={book.discount}
                     condition={book.condition}
                     imageUrl={book.imageUrl}
+                    // --- THIS IS THE FIX ---
+                    rating_avg={book.ratingAvg}
+                    rating_count={book.ratingCount}
                   />
                 </div>
               ))}

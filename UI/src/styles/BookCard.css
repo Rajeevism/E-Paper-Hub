@@ -1,96 +1,86 @@
-/* UI/src/styles/BookCard.css */
-
+/* Create a new file: src/styles/BookCard.css */
 .book-card {
-    position: relative;
-    width: 220px;
+    background-color: var(--background-color);
     border: 1px solid var(--border-color);
-    /* UPDATED */
-    border-radius: 12px;
+    border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    background-color: var(--bg-secondary);
-    /* UPDATED */
     display: flex;
     flex-direction: column;
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.2s ease;
+    transition: box-shadow 0.2s, transform 0.2s;
+    height: 100%;
+    position: relative;
 }
 
 .book-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
 .discount-badge {
     position: absolute;
     top: 10px;
     left: 10px;
-    background-color: #d9534f;
+    background-color: #e47911;
     color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
+    padding: 4px 8px;
     font-size: 0.8rem;
     font-weight: bold;
+    border-radius: 4px;
     z-index: 2;
 }
 
-.book-image-container {
+.book-card-image-container {
     width: 100%;
-    height: 220px;
-    background-color: #f5f5f5;
-    /* Placeholder color is fine */
-    overflow: hidden;
-    position: relative;
-    z-index: 1;
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    background-color: #f8f8f8;
 }
 
-.book-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
+.book-card-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
 }
 
-.book-card:hover .book-image {
-    transform: scale(1.05);
+.book-card-info {
+    padding: 1rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
-.book-details {
-    padding: 15px;
-    text-align: left;
+.book-card-title {
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0 0 0.5rem 0;
+    color: var(--text-color);
+    flex-grow: 1;
 }
 
-.book-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin: 0 0 8px 0;
-    color: var(--text-primary);
-    /* UPDATED */
-}
-
-.book-price-container {
+.book-card-price-container {
     display: flex;
     align-items: baseline;
     gap: 10px;
-    margin-bottom: 8px;
+    margin: 0.5rem 0;
 }
 
-.current-price {
-    font-size: 1.2rem;
+.book-card-price {
+    font-size: 1.5rem;
     font-weight: bold;
-    color: #B12704;
-    /* Keeping this red for emphasis in both themes */
+    color: var(--text-color);
 }
 
-.original-price {
+.book-card-mrp {
     font-size: 0.9rem;
-    color: var(--text-secondary);
-    /* UPDATED */
+    color: var(--text-color-secondary);
     text-decoration: line-through;
 }
 
-.book-condition {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    /* UPDATED */
-    margin: 0;
+.book-card-condition {
+    font-size: 0.8rem;
+    color: var(--text-color-secondary);
+    margin-top: auto;
 }

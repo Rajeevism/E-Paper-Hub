@@ -1,0 +1,31 @@
+.customer-reviews-container {
+    padding: 1rem 0;
+    margin-top: 2rem;
+    border-top: 1px solid #e7e7e7;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.reviews-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.summary-column {
+    flex: 1 1 300px;
+}
+
+.list-column {
+    flex: 2 1 600px;
+    border-left: 1px solid #e7e7e7;
+    padding-left: 2rem;
+}
+
+@media (max-width: 992px) {
+    .list-column {
+        border-left: none;
+        padding-left: 0;
+    }
+}
