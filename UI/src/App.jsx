@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./Router/AppRouter.jsx";
 import NavBar from "./components/NavBar.jsx";
+import SecondaryNavBar from "./components/SecondaryNavBar.jsx"; // --- 1. Import the new component ---
 import AuthModal from "./components/AuthModal.jsx";
 import "./styles/App.css";
 import { AuthProvider } from "./context/AuthContext.jsx";
@@ -14,12 +15,12 @@ function App() {
   const closeAuthModal = () => setIsModalOpen(false);
 
   return (
-    // --- 2. Wrap EVERYTHING inside ThemeProvider ---
     <ThemeProvider>
       <AuthProvider>
         <BrowserRouter>
           <div className="App">
             <NavBar onProfileClick={openAuthModal} />
+            <SecondaryNavBar /> {/* --- 2. Add the component here --- */}
             <main className="main-content">
               <AppRoutes onAuthRequired={openAuthModal} />
             </main>

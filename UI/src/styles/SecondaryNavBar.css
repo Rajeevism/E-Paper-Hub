@@ -1,0 +1,51 @@
+/* src/styles/SecondaryNavBar.css */
+/* --- FULL UPDATED FILE --- */
+
+.secondary-navbar-container {
+    background-color: var(--secondary-nav-bg, #37475a);
+    padding: 0 1rem;
+    color: #fff;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #4a5a6a;
+}
+
+.secondary-navbar {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    max-width: var(--max-width, 1400px);
+    margin: 0 auto;
+    padding: 8px 0;
+}
+
+.secondary-navbar .nav-item {
+    color: #fff;
+    text-decoration: none;
+    padding: 8px 4px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.secondary-navbar .nav-item:hover {
+    border-color: #fff;
+}
+
+/* --- THIS IS THE HIGHLIGHT STYLE --- */
+.secondary-navbar .nav-item.active {
+    background-color: var(--background-color-light);
+    border-color: var(--primary-color);
+    font-weight: bold;
+}
+
+.secondary-navbar .all-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: bold;
+}
+
+.secondary-navbar .sell-link {
+    margin-left: auto;
+    font-weight: 500;
+}

@@ -1,0 +1,82 @@
+/* Create this new file: src/styles/EPaperCard.css */
+
+.epaper-card {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--background-color);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    height: 100%;
+    /* Important for grid layout */
+    display: flex;
+    /* Makes internal layout easier */
+    flex-direction: column;
+}
+
+.epaper-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.epaper-card-image-container {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    /* Makes the image container taller, like a newspaper */
+    overflow: hidden;
+}
+
+.epaper-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Ensures the image covers the container */
+    transition: transform 0.3s;
+}
+
+.epaper-card:hover .epaper-card-image {
+    transform: scale(1.05);
+    /* Slight zoom on hover */
+}
+
+.epaper-card-info {
+    padding: 1rem;
+    text-align: center;
+    flex-grow: 1;
+    /* Pushes the button to the bottom */
+    display: flex;
+    flex-direction: column;
+}
+
+.epaper-card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 0.25rem 0;
+    flex-grow: 1;
+    /* Allows title to take up space */
+}
+
+.epaper-card-publisher {
+    font-size: 0.9rem;
+    color: var(--text-color-secondary);
+    margin: 0 0 1rem 0;
+}
+
+.read-now-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: auto;
+    /* Pushes button to the bottom of the info box */
+}
+
+.read-now-btn:hover {
+    background-color: #0056b3;
+    /* A slightly darker shade of your primary color */
+}

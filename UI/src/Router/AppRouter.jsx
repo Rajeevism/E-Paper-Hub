@@ -9,7 +9,8 @@ import BuyPage from "../pages/BuyPage";
 import SellPage from "../pages/SellPage";
 import ProtectedRoute from "../components/ProtectedRoute";
 import BookDetailsPage from "../pages/BookDetailsPage";
-import SearchResultsPage from "../pages/SearchResultsPage"; // --- 1. Import the new page ---
+import SearchResultsPage from "../pages/SearchResultsPage";
+import CategoryPage from "../pages/CategoryPage"; // --- 1. Import the new CategoryPage ---
 
 const AppRoutes = ({ onAuthRequired }) => {
   return (
@@ -25,9 +26,10 @@ const AppRoutes = ({ onAuthRequired }) => {
         path="/sell"
         element={<SellPage openAuthModal={onAuthRequired} />}
       />
-
-      {/* --- 2. Add the new route for search results --- */}
       <Route path="/search" element={<SearchResultsPage />} />
+
+      {/* --- 2. Add the new dynamic route for categories --- */}
+      <Route path="/category/:categoryName" element={<CategoryPage />} />
 
       {/* --- PROTECTED ROUTES --- */}
       <Route

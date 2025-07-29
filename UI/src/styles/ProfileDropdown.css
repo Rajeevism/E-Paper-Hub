@@ -1,71 +1,130 @@
+/* src/styles/ProfileDropdown.css */
+/* --- THE CORRECT, PROFESSIONAL VERSION --- */
+
 .profile-dropdown {
     position: absolute;
-    top: 60px;
-    /* Position below navbar */
+    top: 120%;
     right: 0;
     width: 280px;
-    background-color: var(--bg-secondary);
+    background-color: var(--background-color-light);
+    /* Uses theme variable */
     border: 1px solid var(--border-color);
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    z-index: 100;
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    /* Uses theme variable */
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    overflow: hidden;
+    padding: 0.5rem 0;
 }
 
 .dropdown-header {
-    padding: 5px;
+    padding: 0.75rem 1.25rem;
 }
 
-.dropdown-greeting {
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: var(--text-primary);
+.user-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-color);
+    /* Uses theme variable */
     margin: 0;
 }
 
-.dropdown-email {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
+.user-email {
+    font-size: 0.85rem;
+    color: var(--text-color-secondary);
+    /* Uses theme variable */
+    margin: 0.25rem 0 0 0;
 }
 
-.dropdown-section {
-    padding: 5px;
+.dropdown-divider {
+    border: 0;
+    border-top: 1px solid var(--border-color);
+    /* Uses theme variable */
+    margin: 0.5rem 0;
 }
 
 .dropdown-item {
-    display: block;
-    padding: 10px;
-    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.95rem;
+    color: var(--text-color);
+    /* Uses theme variable */
     text-decoration: none;
-    border-radius: 5px;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
     transition: background-color 0.2s;
 }
 
 .dropdown-item:hover {
-    background-color: var(--bg-hover);
+    background-color: var(--hover-color);
+    /* Uses theme variable */
 }
 
-.logout-button {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    background-color: #d9534f;
-    color: white;
-    border-radius: 5px;
+.dropdown-icon {
+    color: var(--text-color-secondary);
+    /* Uses theme variable */
+    font-size: 1.1rem;
+}
+
+/* Theme Switcher Styles */
+.theme-switcher-section {
+    padding: 0.5rem 1.25rem;
+}
+
+.theme-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-color-secondary);
+    /* Uses theme variable */
+    text-transform: uppercase;
+    margin: 0 0 0.75rem 0;
+}
+
+.theme-options {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.theme-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem;
+    font-size: 0.85rem;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background-color: var(--background-color);
+    /* Uses theme variable */
+    color: var(--text-color);
+    /* Uses theme variable */
     cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.2s;
+    transition: border-color 0.2s, background-color 0.2s;
 }
 
-.logout-button:hover {
-    background-color: #c9302c;
+.theme-btn.active {
+    border-color: var(--primary-color);
 }
 
-hr {
-    border: none;
-    border-top: 1px solid var(--border-color);
-    margin: 5px 0;
+.theme-btn:hover {
+    background-color: var(--hover-color);
+}
+
+.logout-btn {
+    color: #d9534f;
+}
+
+.logout-btn .dropdown-icon {
+    color: #d9534f;
+}
+
+.logout-btn:hover {
+    background-color: rgba(217, 83, 79, 0.1);
 }

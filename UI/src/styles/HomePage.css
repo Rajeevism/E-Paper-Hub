@@ -1,80 +1,74 @@
-/* UI/src/styles/HomePage.css */
 
-/* This rule applies the card style to both the hero and book sections */
-.hero,
-.book-section {
-    max-width: 1200px;
-    margin: 25px auto;
-    padding: 25px;
-    background-color: var(--bg-secondary);
-    /* UPDATED */
-    border: 1px solid var(--border-color);
-    /* UPDATED */
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    /* Simplified shadow for both themes */
-    transition: background-color 0.2s ease, border-color 0.2s ease;
-}
-
-/* Styles for the "Old Books" and "New Books" headings */
-.book-section h3 {
-    font-size: 1.8rem;
-    text-align: left;
-    margin-top: 0;
-    margin-bottom: 20px;
-    color: var(--text-primary);
-    /* UPDATED */
-}
-
-/* Grid layout for the books (no changes needed) */
-.book-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 25px;
-    justify-content: flex-start;
-}
-
-/* Styles for your hero section content */
-.hero h2 {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
+.hero {
     text-align: center;
-    color: var(--text-primary);
-    /* UPDATED */
+    padding: 2rem 1rem;
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+.hero h2 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    font-weight: 500;
 }
 
 .hero-buttons {
     display: flex;
     justify-content: center;
-    gap: 15px;
+    gap: 1rem;
 }
 
-/* Your existing button styles (no changes needed) */
-.buy-btn,
-.sell-btn {
+.hero-buttons .buy-btn,
+.hero-buttons .sell-btn {
     padding: 12px 24px;
     border: none;
     border-radius: 8px;
     font-size: 1rem;
-    font-weight: bold;
+    font-weight: 500;
     cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
 }
 
-.buy-btn {
-    background-color: #007bff;
-    color: white;
+.hero-buttons .buy-btn {
+    background-color: var(--primary-color);
+    color: #fff;
 }
 
-.sell-btn {
-    background-color: #28a745;
-    color: white;
+.hero-buttons .sell-btn {
+    background-color: var(--background-color-light);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
 }
 
-/* A general error message style if you need it */
-.error-message {
-    color: #D8000C;
-    background-color: #FFD2D2;
-    padding: 10px;
-    border-radius: 5px;
-    text-align: center;
+.hero-buttons .buy-btn:hover,
+.hero-buttons .sell-btn:hover {
+    transform: translateY(-2px);
+}
+
+.book-section {
+    margin-bottom: 2rem;
+}
+
+.book-section h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 0.5rem;
+    display: inline-block;
+}
+
+/* --- THIS IS THE FIX --- */
+.book-grid {
+    display: grid;
+    /* Use CSS Grid for the layout */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    /* Create responsive columns */
+    gap: 1.5rem;
+    /* The space between cards */
+    align-items: stretch;
+    /* This is the magic property that makes all items in a row the same height */
 }
